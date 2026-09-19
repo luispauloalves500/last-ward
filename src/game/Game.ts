@@ -188,6 +188,8 @@ export class Game {
       urls.add(c.walk);
       urls.add(c.attack);
       urls.add(c.portrait);
+      if (c.jump) urls.add(c.jump);
+      if (c.hurt) urls.add(c.hurt);
     }
     for (const e of Object.values(ENEMIES)) urls.add(e.sprite);
     urls.add("/sprites/props.png");
@@ -346,6 +348,8 @@ export class Game {
     a.idle = def.idle;
     a.walk = def.walk;
     a.attack = def.attack;
+    a.jump = def.jump ?? def.idle;
+    a.hurt = def.hurt ?? def.idle;
     const comboUpgrade = `${id[0]}-combo`;
     a.moves = def.moves.filter((m) => !m.secret || ups.has(comboUpgrade));
     a.special = def.special;
@@ -369,6 +373,8 @@ export class Game {
     a.idle = def.sprite;
     a.walk = def.sprite;
     a.attack = def.sprite;
+    a.jump = def.sprite;
+    a.hurt = def.sprite;
     a.moves = def.moves;
     a.scale = def.scale ?? 1;
     a.archetype = def.archetype;
@@ -425,6 +431,8 @@ export class Game {
       idle: "",
       walk: "",
       attack: "",
+      jump: "",
+      hurt: "",
       stats: { hp: 40, str: 1, spd: 1, def: 1, range: 1, mobility: 1, jump: 260 },
       moves: [],
       special: null,

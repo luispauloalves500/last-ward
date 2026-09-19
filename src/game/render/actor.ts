@@ -82,8 +82,10 @@ export function drawFighter(ctx: CanvasRenderingContext2D, a: Actor, camX: numbe
 }
 
 function sheetFor(a: Actor) {
-  if (a.state === "fallen" || a.downed) return a.idle;
+  if (a.state === "fallen" || a.downed) return a.hurt || a.idle;
+  if (a.state === "hurt" || a.state === "launch" || a.state === "stun") return a.hurt || a.idle;
   if (a.anim === "attack" || a.state === "special" || a.state === "super" || a.state === "throw") return a.attack;
+  if (a.state === "jump" || a.state === "airAttack" || a.z > 8) return a.jump || a.idle;
   if (a.anim === "walk" || a.anim === "run") return a.walk;
   return a.idle;
 }

@@ -50,6 +50,8 @@ export type Actor = {
   idle: string;
   walk: string;
   attack: string;
+  jump: string;
+  hurt: string;
   stats: Stats;
   moves: MoveDef[];
   special: MoveDef | null;

@@ -82,6 +82,8 @@ export type CharacterDef = {
   idle: string;
   walk: string;
   attack: string;
+  jump?: string;
+  hurt?: string;
 };
 
 export type EnemyArchetype =

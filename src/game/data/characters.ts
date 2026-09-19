@@ -20,6 +20,8 @@ export const CHARACTERS: Record<string, CharacterDef> = {
     idle: "/sprites/kael-idle.png",
     walk: "/sprites/kael-walk.png",
     attack: "/sprites/kael-attack.png",
+    jump: "/sprites/kael-jump.png",
+    hurt: "/sprites/kael-hurt.png",
     grabBonus: 1.1,
     moves: [
       L({ id: "k-l", name: "Jab", seq: ["L"], frames: 14, step: 8, hits: [{ start: 4, end: 8, dmg: 7, knock: 50, launch: 0, hitstun: 0.12, hitstop: 2, reach: 26, height: 20, depth: 12, juggle: false, knockdown: false }] }),
@@ -61,6 +63,8 @@ export const CHARACTERS: Record<string, CharacterDef> = {
     idle: "/sprites/vyra-idle.png",
     walk: "/sprites/vyra-walk.png",
     attack: "/sprites/vyra-attack.png",
+    jump: "/sprites/vyra-jump.png",
+    hurt: "/sprites/vyra-hurt.png",
     grabBonus: 0.9,
     moves: [
       L({ id: "v-l", name: "Corte", seq: ["L"], frames: 10, step: 6, hits: [{ start: 3, end: 7, dmg: 5, knock: 40, launch: 0, hitstun: 0.1, hitstop: 2, reach: 30, height: 18, depth: 12, juggle: false, knockdown: false }] }),
@@ -101,6 +105,8 @@ export const CHARACTERS: Record<string, CharacterDef> = {
     idle: "/sprites/rutger-idle.png",
     walk: "/sprites/rutger-walk.png",
     attack: "/sprites/rutger-attack.png",
+    jump: "/sprites/rutger-jump.png",
+    hurt: "/sprites/rutger-hurt.png",
     grabBonus: 1.6,
     moves: [
       L({ id: "r-l", name: "Pancada", seq: ["L"], frames: 20, step: 12, hits: [{ start: 7, end: 12, dmg: 12, knock: 90, launch: 0, hitstun: 0.18, hitstop: 4, reach: 30, height: 24, depth: 16, juggle: false, knockdown: false }] }),
@@ -139,6 +145,8 @@ export const CHARACTERS: Record<string, CharacterDef> = {
     idle: "/sprites/sien-idle.png",
     walk: "/sprites/sien-walk.png",
     attack: "/sprites/sien-attack.png",
+    jump: "/sprites/sien-jump.png",
+    hurt: "/sprites/sien-hurt.png",
     grabBonus: 1.15,
     moves: [
       L({ id: "s-l", name: "Toque", seq: ["L"], frames: 12, step: 7, hits: [{ start: 4, end: 8, dmg: 6, knock: 45, launch: 0, hitstun: 0.12, hitstop: 2, reach: 32, height: 20, depth: 12, juggle: false, knockdown: false }] }),

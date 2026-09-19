@@ -31,18 +31,43 @@ export const THEMES: Record<StageTheme, Palette> = {
 
 const FAR_PLATE: Partial<Record<StageTheme, string>> = {
   urban: "/sprites/bg-urban-far.jpg",
-  roofs: "/sprites/bg-urban-far.jpg",
+  roofs: "/sprites/bg-roofs-far.jpg",
   metro: "/sprites/bg-metro-far.jpg",
-  helix: "/sprites/bg-metro-far.jpg",
+  helix: "/sprites/bg-helix-far.jpg",
   factory: "/sprites/bg-factory-far.jpg",
   industrial: "/sprites/bg-factory-far.jpg",
   docks: "/sprites/bg-docks-far.jpg",
+  mall: "/sprites/bg-mall-far.jpg",
+  hollow: "/sprites/bg-hollow-far.jpg",
+  secret: "/sprites/bg-hollow-far.jpg",
+  spire: "/sprites/bg-helix-far.jpg",
+  dojo: "/sprites/bg-mall-far.jpg",
 };
 
 const MID_PLATE: Partial<Record<StageTheme, string>> = {
   urban: "/sprites/bg-urban-mid.jpg",
   roofs: "/sprites/bg-urban-mid.jpg",
-  mall: "/sprites/bg-urban-mid.jpg",
+  mall: "/sprites/bg-mall-far.jpg",
+  metro: "/sprites/bg-metro-mid.jpg",
+  helix: "/sprites/bg-metro-mid.jpg",
+  factory: "/sprites/bg-factory-mid.jpg",
+  industrial: "/sprites/bg-factory-mid.jpg",
+  docks: "/sprites/bg-docks-mid.jpg",
+};
+
+const FLOOR_PLATE: Partial<Record<StageTheme, string>> = {
+  urban: "/sprites/floor-urban.png",
+  roofs: "/sprites/floor-roofs.png",
+  metro: "/sprites/floor-metro.png",
+  factory: "/sprites/floor-factory.png",
+  industrial: "/sprites/floor-factory.png",
+  docks: "/sprites/floor-docks.png",
+  mall: "/sprites/floor-mall.png",
+  helix: "/sprites/floor-mall.png",
+  hollow: "/sprites/floor-docks.png",
+  secret: "/sprites/floor-mall.png",
+  dojo: "/sprites/floor-mall.png",
+  spire: "/sprites/floor-metro.png",
 };
 
 function hash(n: number) {
@@ -132,14 +157,25 @@ export function drawForeground(ctx: CanvasRenderingContext2D, theme: StageTheme,
 function drawGround(ctx: CanvasRenderingContext2D, p: Palette, camX: number, theme: StageTheme) {
   ctx.fillStyle = p.ground;
   ctx.fillRect(0, GROUND_Y - 78, VIEW_W, VIEW_H);
-  ctx.fillStyle = p.ground2;
-  const tile = 24;
-  const ox = -((camX % tile) + tile) % tile;
-  for (let x = ox; x < VIEW_W + tile; x += tile) {
-    ctx.globalAlpha = 0.22;
-    ctx.fillRect(x, GROUND_Y - 78, 12, 3);
-    ctx.globalAlpha = 0.08;
-    ctx.fillRect(x, GROUND_Y - 40, 18, 1);
+  const floor = getSprite(FLOOR_PLATE[theme] ?? "");
+  if (floor && floor.naturalWidth) {
+    const fw = floor.naturalWidth;
+    const fh = floor.naturalHeight;
+    const ox = -((camX % fw) + fw) % fw;
+    ctx.imageSmoothingEnabled = false;
+    for (let x = ox; x < VIEW_W + fw; x += fw) {
+      ctx.drawImage(floor, x, GROUND_Y - 78, fw, Math.max(fh, 36));
+    }
+  } else {
+    ctx.fillStyle = p.ground2;
+    const tile = 24;
+    const ox = -((camX % tile) + tile) % tile;
+    for (let x = ox; x < VIEW_W + tile; x += tile) {
+      ctx.globalAlpha = 0.22;
+      ctx.fillRect(x, GROUND_Y - 78, 12, 3);
+      ctx.globalAlpha = 0.08;
+      ctx.fillRect(x, GROUND_Y - 40, 18, 1);
+    }
   }
   ctx.globalAlpha = 1;
   ctx.fillStyle = p.accent;
@@ -374,6 +410,19 @@ export const BG_URLS = [
   "/sprites/bg-urban-far.jpg",
   "/sprites/bg-urban-mid.jpg",
   "/sprites/bg-metro-far.jpg",
+  "/sprites/bg-metro-mid.jpg",
   "/sprites/bg-factory-far.jpg",
+  "/sprites/bg-factory-mid.jpg",
   "/sprites/bg-docks-far.jpg",
+  "/sprites/bg-docks-mid.jpg",
+  "/sprites/bg-roofs-far.jpg",
+  "/sprites/bg-mall-far.jpg",
+  "/sprites/bg-hollow-far.jpg",
+  "/sprites/bg-helix-far.jpg",
+  "/sprites/floor-urban.png",
+  "/sprites/floor-metro.png",
+  "/sprites/floor-factory.png",
+  "/sprites/floor-docks.png",
+  "/sprites/floor-roofs.png",
+  "/sprites/floor-mall.png",
 ];
