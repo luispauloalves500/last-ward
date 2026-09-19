@@ -25,5 +25,6 @@ assets/maps
 *.local
 .node_modules.lock
 /tmp
+public/maps
 public/last-ward.zip
 .project_id

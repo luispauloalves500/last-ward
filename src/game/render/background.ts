@@ -56,18 +56,18 @@ const MID_PLATE: Partial<Record<StageTheme, string>> = {
 };
 
 const FLOOR_PLATE: Partial<Record<StageTheme, string>> = {
-  urban: "/sprites/floor-urban.png",
-  roofs: "/sprites/floor-roofs.png",
-  metro: "/sprites/floor-metro.png",
-  factory: "/sprites/floor-factory.png",
-  industrial: "/sprites/floor-factory.png",
-  docks: "/sprites/floor-docks.png",
-  mall: "/sprites/floor-mall.png",
-  helix: "/sprites/floor-mall.png",
-  hollow: "/sprites/floor-docks.png",
-  secret: "/sprites/floor-mall.png",
-  dojo: "/sprites/floor-mall.png",
-  spire: "/sprites/floor-metro.png",
+  urban: "/sprites/floor-urban.jpg",
+  roofs: "/sprites/floor-roofs.jpg",
+  metro: "/sprites/floor-metro.jpg",
+  factory: "/sprites/floor-factory.jpg",
+  industrial: "/sprites/floor-factory.jpg",
+  docks: "/sprites/floor-docks.jpg",
+  mall: "/sprites/floor-mall.jpg",
+  helix: "/sprites/floor-mall.jpg",
+  hollow: "/sprites/floor-docks.jpg",
+  secret: "/sprites/floor-mall.jpg",
+  dojo: "/sprites/floor-mall.jpg",
+  spire: "/sprites/floor-metro.jpg",
 };
 
 function hash(n: number) {
@@ -419,10 +419,14 @@ export const BG_URLS = [
   "/sprites/bg-mall-far.jpg",
   "/sprites/bg-hollow-far.jpg",
   "/sprites/bg-helix-far.jpg",
-  "/sprites/floor-urban.png",
-  "/sprites/floor-metro.png",
-  "/sprites/floor-factory.png",
-  "/sprites/floor-docks.png",
-  "/sprites/floor-roofs.png",
-  "/sprites/floor-mall.png",
+  "/sprites/floor-urban.jpg",
+  "/sprites/floor-metro.jpg",
+  "/sprites/floor-factory.jpg",
+  "/sprites/floor-docks.jpg",
+  "/sprites/floor-roofs.jpg",
+  "/sprites/floor-mall.jpg",
 ];
+
+export function themeAssetUrls(theme: StageTheme): string[] {
+  return [FAR_PLATE[theme], MID_PLATE[theme], FLOOR_PLATE[theme]].filter((u): u is string => Boolean(u));
+}

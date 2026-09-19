@@ -20,7 +20,7 @@ import { ENEMIES, WEAPONS } from "./data/enemies";
 import { BOSS_RUSH, STAGES } from "./data/stages";
 import { CHALLENGES } from "./data/meta";
 import { loadPersist, type Session } from "./persist";
-import { drawBackground, drawForeground, worldToScreen, BG_URLS } from "./render/background";
+import { drawBackground, drawForeground, worldToScreen, BG_URLS, themeAssetUrls } from "./render/background";
 import { drawFighter, drawShadow } from "./render/actor";
 import { drawSheet, preloadAll } from "./sprites";
 import { nid, resetIds, type Actor, type WeaponInst } from "./sim/actor";
@@ -28,6 +28,19 @@ import type { AttackKind, CharId, HitDef, MoveDef, Rank, StageDef, StageResult }
 import { bounceIfWalled, canOtg, hasArmor, isCounter, separateCrowd } from "./combat/feel";
 import { CHAR_TAUNT, SECRET_LINES, STAGE_INTRO, TUTORIAL } from "./data/story";
 import { altBossFor, pickFork } from "./world/director";
+
+function enemyTypesIn(st: StageDef): string[] {
+  const ids = new Set<string>(["thug"]);
+  for (const seg of st.segments) {
+    if (seg.kind === "lock") {
+      for (const wave of seg.waves) for (const w of wave) ids.add(w.type);
+    } else if (seg.kind === "miniboss" || seg.kind === "boss") {
+      ids.add(seg.enemy);
+      if (seg.kind === "boss" && seg.alt) ids.add(seg.alt.enemy);
+    }
+  }
+  return [...ids];
+}
 
 export type HudSnap = {
   p1?: Actor;
@@ -182,8 +195,18 @@ export class Game {
         this.continues = this.session.continues ?? slot.continues ?? 3;
       }
     }
-    const urls = new Set<string>();
-    for (const c of Object.values(CHARACTERS)) {
+    const urls = new Set<string>([
+      "/sprites/props.png",
+      "/sprites/weapons.png",
+      "/sprites/impact.png",
+      "/sprites/item-apple.png",
+      "/sprites/item-chicken.png",
+      "/sprites/item-pizza.png",
+      "/sprites/item-soda.png",
+    ]);
+    for (const id of this.session.chars) {
+      const c = CHARACTERS[id];
+      if (!c) continue;
       urls.add(c.idle);
       urls.add(c.walk);
       urls.add(c.attack);
@@ -191,17 +214,18 @@ export class Game {
       if (c.jump) urls.add(c.jump);
       if (c.hurt) urls.add(c.hurt);
     }
-    for (const e of Object.values(ENEMIES)) urls.add(e.sprite);
-    urls.add("/sprites/props.png");
-    urls.add("/sprites/weapons.png");
-    urls.add("/sprites/impact.png");
-    urls.add("/sprites/item-apple.png");
-    urls.add("/sprites/item-chicken.png");
-    urls.add("/sprites/item-pizza.png");
-    urls.add("/sprites/item-soda.png");
-    for (const u of BG_URLS) urls.add(u);
+    const bootStage = STAGES[this.session.stageId] ?? STAGES["rain-street"]!;
+    for (const u of themeAssetUrls(bootStage.theme)) urls.add(u);
+    for (const type of enemyTypesIn(bootStage)) {
+      const e = ENEMIES[type];
+      if (e) urls.add(e.sprite);
+    }
     await preloadAll([...urls]);
     this.setupStage(this.session.stageId);
+    void preloadAll(BG_URLS.filter((u) => !urls.has(u)));
+    const restChars = Object.values(CHARACTERS).flatMap((c) => [c.idle, c.walk, c.attack, c.portrait, c.jump, c.hurt].filter(Boolean) as string[]);
+    const restEnemies = Object.values(ENEMIES).map((e) => e.sprite);
+    void preloadAll([...restChars, ...restEnemies].filter((u) => !urls.has(u)));
     this.running = true;
     this.last = performance.now();
     const loop = (t: number) => {
@@ -241,6 +265,7 @@ export class Game {
   setupStage(id: string) {
     const st = STAGES[id] ?? STAGES["rain-street"]!;
     this.stage = st;
+    void preloadAll([...themeAssetUrls(st.theme), ...enemyTypesIn(st).map((t) => ENEMIES[t]?.sprite).filter(Boolean) as string[]]);
     this.seg = 0;
     this.camX = 0;
     this.lockMin = 0;
